@@ -1,0 +1,43 @@
+
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
+
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #020005; touch-action: none; font-family: 'Rajdhani', sans-serif; user-select: none; }
+        #game-canvas { display: block; width: 100%; height: 100%; }
+
+        /* Cyberpunk UI Styling */
+        .glass-panel { background: rgba(10, 5, 20, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(0, 255, 255, 0.2); box-shadow: 0 0 20px rgba(0, 255, 255, 0.1), inset 0 0 20px rgba(0, 255, 255, 0.05); border-radius: 12px; }
+        .neon-text-cyan { font-family: 'Orbitron', sans-serif; color: #fff; text-shadow: 0 0 5px #fff, 0 0 10px #0ff, 0 0 20px #0ff, 0 0 40px #0ff; }
+        .neon-text-magenta { font-family: 'Orbitron', sans-serif; color: #fff; text-shadow: 0 0 5px #fff, 0 0 10px #f0f, 0 0 20px #f0f, 0 0 40px #f0f; }
+        .neon-text-yellow { font-family: 'Orbitron', sans-serif; color: #fff; text-shadow: 0 0 5px #fff, 0 0 10px #ff0, 0 0 20px #ff0; }
+        
+        .cyber-button { background: linear-gradient(45deg, transparent 5%, rgba(0, 255, 255, 0.1) 5%); border: 2px solid #0ff; color: #0ff; font-family: 'Orbitron', sans-serif; transition: all 0.2s; text-transform: uppercase; box-shadow: 0 0 10px rgba(0, 255, 255, 0.2), inset 0 0 10px rgba(0, 255, 255, 0.2); clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); }
+        .cyber-button:hover, .cyber-button:active { background: #0ff; color: #000; box-shadow: 0 0 20px #0ff, inset 0 0 20px #0ff; cursor: pointer; transform: scale(1.05); }
+
+        .scanlines { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.3) 51%); background-size: 100% 4px; pointer-events: none; z-index: 10; opacity: 0.6; }
+        .vignette { position: absolute; inset: 0; background: radial-gradient(circle, transparent 50%, rgba(0,0,0,0.8) 100%); pointer-events: none; z-index: 9; }
+
+        /* HUD Powerup Bars */
+        .power-bar-container { width: 150px; height: 10px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); border-radius: 5px; overflow: hidden; margin-top: 4px; }
+        .power-bar-fill { height: 100%; width: 0%; transition: width 0.1s linear; }
+        .bg-neon-white { background: #fff; box-shadow: 0 0 10px #fff; }
+        .bg-neon-green { background: #0f0; box-shadow: 0 0 10px #0f0; }
+
+        /* Touch Zones */
+        #touch-controls { position: absolute; inset: 0; z-index: 20; display: none; }
+        .touch-zone { position: absolute; }
+        #zone-left { left: 0; bottom: 0; width: 50%; height: 50%; }
+        #zone-right { right: 0; bottom: 0; width: 50%; height: 50%; }
+        #zone-top { left: 0; top: 0; width: 100%; height: 50%; }
+
+        .hide { display: none !important; }
+    
+
+*,::before,::after{box-sizing:border-box;border-width:0;border-style:solid}button,input{font:inherit;color:inherit}button{background:transparent;cursor:pointer}button:disabled{opacity:.5;cursor:wait}h1,h2,h3,p{margin:0}h1,h2{font-weight:400}ol{margin:0;padding:0;list-style:none}
+.absolute{position:absolute}.inset-0{inset:0}.top-0{top:0}.left-0{left:0}.w-full{width:100%}.w-80{width:20rem}.w-\[90\%\]{width:90%}.max-w-lg{max-width:32rem}
+.p-4{padding:1rem}.p-8{padding:2rem}.px-3{padding-left:.75rem;padding-right:.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-8{padding-left:2rem;padding-right:2rem}.px-10{padding-left:2.5rem;padding-right:2.5rem}.py-1{padding-top:.25rem;padding-bottom:.25rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-4{padding-top:1rem;padding-bottom:1rem}
+.z-30{z-index:30}.z-40{z-index:40}.z-50{z-index:50}.flex{display:flex}.flex-col{flex-direction:column}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.items-start{align-items:flex-start}.items-end{align-items:flex-end}.items-center{align-items:center}.gap-1{gap:.25rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.pointer-events-none{pointer-events:none}.pointer-events-auto{pointer-events:auto}
+.text-xs{font-size:.75rem;line-height:1rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-5xl{font-size:3rem;line-height:1}.text-center{text-align:center}.text-white{color:#fff}.text-gray-300{color:#d1d5db}.text-gray-400{color:#9ca3af}.text-cyan-400{color:#22d3ee}.text-green-400{color:#4ade80}.text-red-500{color:#ef4444}.text-cyan-200\/50{color:#a5f3fc80}.font-bold{font-weight:700}.uppercase{text-transform:uppercase}.tracking-widest{letter-spacing:.1em}.tracking-wider{letter-spacing:.05em}.tracking-tighter{letter-spacing:-.05em}
+.mb-1{margin-bottom:.25rem}.mb-2{margin-bottom:.5rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mb-8{margin-bottom:2rem}.mt-1{margin-top:.25rem}.mt-8{margin-top:2rem}.opacity-80{opacity:.8}.bg-black\/60{background-color:#0009}.bg-black\/40{background-color:#0006}.backdrop-blur-sm{backdrop-filter:blur(4px)}.backdrop-blur-md{backdrop-filter:blur(12px)}
+@media(min-width:768px){.md\:p-6{padding:1.5rem}.md\:p-12{padding:3rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:text-6xl{font-size:3.75rem;line-height:1}.md\:text-xl{font-size:1.25rem;line-height:1.75rem}}
+#connection-status{position:fixed;bottom:12px;left:16px;z-index:70;font-size:12px;letter-spacing:.08em;color:#8ef5dc;text-shadow:0 1px 8px black;pointer-events:none;max-width:80vw}#pilot-name{width:100%;padding:10px 12px;background:#0a1420;border:1px solid #0ff5;border-radius:5px;margin:4px 0 20px;color:white;text-align:center;outline:none;user-select:text}#pilot-name:focus{border-color:#0ff}.pilot-label{color:#b4cad2;font-size:14px}.ranking-panel{width:100%;font-size:14px;margin:0 0 20px;color:#bde9ee}.ranking-panel h3{font-family:Orbitron,sans-serif;font-size:12px;letter-spacing:.12em;margin-bottom:8px}.ranking-panel li{display:flex;justify-content:space-between;gap:24px;line-height:1.6}
+@media(max-height:720px){.glass-panel{max-height:94vh;overflow:auto;padding:22px}#ui-menu .mt-8{margin-top:16px}#ui-gameover .mb-8{margin-bottom:12px}#ui-gameover .text-4xl{font-size:26px}#ui-gameover .text-5xl{font-size:36px}}
