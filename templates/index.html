@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Neon Bike Runner 3D - NeonBikeRunner3D</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    
+    <!-- Import Maps para Three.js v0.160.0 -->
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "/static/vendor/three.module.js",
+                "three/addons/": "/static/vendor/addons/"
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <div id="connection-status" role="status" aria-live="polite">Conectando…</div><div class="vignette"></div>
+    <div class="scanlines"></div>
+
+    <!-- MAIN HUD -->
+    <div id="ui-hud" class="absolute top-0 left-0 w-full p-4 md:p-6 z-30 flex justify-between items-start pointer-events-none hide">
+        <div class="flex flex-col gap-1">
+            <div class="text-2xl md:text-4xl neon-text-cyan" id="score-display">000000</div>
+            <div class="text-lg md:text-xl neon-text-yellow flex items-center gap-2">
+                <span class="text-xl">O</span> <span id="coin-display">0</span>
+            </div>
+            <div class="text-sm md:text-md text-magenta-400 font-bold tracking-widest mt-1" style="color:#f0f; text-shadow: 0 0 8px #f0f;">VELOCIDAD x<span id="speed-display">1.0</span></div>
+        </div>
+
+        <div class="flex flex-col gap-3 items-end">
+            <button id="btn-pause" class="pointer-events-auto cyber-button px-3 py-1 text-sm mb-2">PAUSA</button>
+            
+            <div id="hud-shield" class="hide flex flex-col items-end">
+                <span class="text-white font-bold tracking-wider text-sm" style="text-shadow: 0 0 5px #fff;">ESCUDO</span>
+                <div class="power-bar-container"><div id="bar-shield" class="power-bar-fill bg-neon-white" style="width: 100%"></div></div>
+            </div>
+
+            <div id="hud-laser" class="hide flex flex-col items-end">
+                <span class="text-green-400 font-bold tracking-wider text-sm" style="text-shadow: 0 0 5px #0f0;">LASER</span>
+                <div class="power-bar-container"><div id="bar-laser" class="power-bar-fill bg-neon-green" style="width: 100%"></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN MENU -->
+    <div id="ui-menu" class="absolute inset-0 z-40 flex items-center justify-center pointer-events-auto">
+        <div class="glass-panel p-8 md:p-12 flex flex-col items-center max-w-lg w-[90%]">
+            <h1 class="text-4xl md:text-6xl text-center mb-2 neon-text-magenta tracking-tighter">SYNTH<br><span class="neon-text-cyan">RIDER</span></h1>
+            <p class="text-gray-300 text-center mb-8 text-sm uppercase tracking-widest">NeonBikeRunner3D</p>
+            
+            <label class="pilot-label" for="pilot-name">Tu alias</label><input id="pilot-name" maxlength="24" value="Piloto" autocomplete="off" spellcheck="false" aria-label="Tu alias para la clasificación"><button id="btn-start" class="cyber-button text-xl px-10 py-4 mb-4 w-full">INICIAR PARTIDA</button>
+            <button id="btn-settings" class="cyber-button text-sm px-6 py-2 w-full opacity-80 hover:opacity-100">AJUSTES</button>
+
+            <div class="mt-8 text-xs text-cyan-200/50 text-center flex flex-col gap-1">
+                <span>A / D o flechas · Moverse</span>
+                <span>Espacio · Disparar con el poder láser</span>
+                <span>Móvil · Lados para girar y zona superior para disparar</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAME OVER -->
+    <div id="ui-gameover" class="absolute inset-0 z-40 flex items-center justify-center pointer-events-auto hide bg-black/60 backdrop-blur-sm">
+        <div class="glass-panel p-8 md:p-12 flex flex-col items-center border-red-500/50" style="box-shadow: 0 0 30px rgba(255,0,0,0.2);">
+            <h2 class="text-4xl text-red-500 font-bold mb-6 tracking-widest" style="font-family: 'Orbitron', sans-serif; text-shadow: 0 0 10px red;">FIN DE LA PARTIDA</h2>
+            
+            <div class="text-center mb-8">
+                <p class="text-gray-400 uppercase text-sm mb-1">Puntaje final</p>
+                <p id="go-score" class="text-5xl neon-text-cyan mb-4">0</p>
+                <p class="text-gray-400 uppercase text-sm mb-1">Monedas recogidas</p>
+                <p id="go-coins" class="text-2xl neon-text-yellow">0</p>
+            </div>
+
+            <div class="ranking-panel"><h3>MEJORES MARCAS</h3><ol id="ranking-list"></ol></div><button id="btn-restart" class="cyber-button text-lg px-10 py-3 w-full">JUGAR DE NUEVO</button>
+        </div>
+    </div>
+
+    <!-- PAUSA MENU -->
+    <div id="ui-pause" class="absolute inset-0 z-50 flex items-center justify-center pointer-events-auto hide bg-black/40 backdrop-blur-md">
+        <div class="glass-panel p-8 flex flex-col items-center w-80">
+            <h2 id="pause-title" class="text-3xl neon-text-cyan mb-8">PAUSA</h2>
+            <button id="btn-resume" class="cyber-button text-lg px-8 py-3 mb-4 w-full">CONTINUAR</button>
+            <button id="btn-quit" class="cyber-button text-sm px-8 py-2 w-full opacity-80">VOLVER AL INICIO</button>
+        </div>
+    </div>
+
+    <!-- AJUSTES MENU -->
+    <div id="ui-settings" class="absolute inset-0 z-50 flex items-center justify-center pointer-events-auto hide bg-black/60 backdrop-blur-md">
+        <div class="glass-panel p-8 flex flex-col items-center w-80">
+            <h2 class="text-2xl neon-text-magenta mb-8">AJUSTES</h2>
+            
+            <div class="w-full flex justify-between items-center mb-8">
+                <span class="text-cyan-400 font-bold">SONIDO</span>
+                <button id="btn-toggle-audio" class="cyber-button px-4 py-1">ON</button>
+            </div>
+
+            <button id="btn-close-settings" class="cyber-button text-sm px-8 py-2 w-full">VOLVER</button>
+        </div>
+    </div>
+
+    <!-- TOUCH CONTROLS -->
+    <div id="touch-controls">
+        <div id="zone-top" class="touch-zone"></div>
+        <div id="zone-left" class="touch-zone"></div>
+        <div id="zone-right" class="touch-zone"></div>
+    </div>
+
+    <script type="module" src="/static/game.js"></script>
+</body>
+</html>
